@@ -63,6 +63,31 @@
       </tbody>
     </table>
 
+    <section class="panel">
+      <h3 class="panel-title">限制件待办台账（地服视角，与危险品申报页读同一份数据）</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>航班号</th>
+            <th>航班日期</th>
+            <th>限制件票数</th>
+            <th>申报单号</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="entry in restricted" :key="`${entry.航班号}-${entry.航班日期}`">
+            <td>{{ entry.航班号 }}</td>
+            <td>{{ entry.航班日期 }}</td>
+            <td>{{ entry.限制件票数 }}</td>
+            <td>{{ entry.申报单号.join('、') }}</td>
+          </tr>
+          <tr v-if="!restricted.length">
+            <td colspan="4" class="empty-state">暂无审核通过的限制件</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
     <footer class="page-foot">
       <span>共 {{ total }} 条航班保障记录</span>
       <span v-if="errorMessage" class="error-text">{{ errorMessage }}</span>
@@ -79,6 +104,7 @@ import {
   moduleMeta,
   runAction as applyAction,
 } from '@/api/local-service'
+import { restrictedLedger, type LedgerEntry } from '@/api/dgoods-service'
 import type { EntryRow } from '@/data/types'
 
 const meta = moduleMeta('flight')
@@ -91,6 +117,7 @@ const rows = ref<EntryRow[]>([])
 const total = ref(0)
 const errorMessage = ref('')
 const filters = ref<Record<string, string>>({})
+const restricted = ref<LedgerEntry[]>([])
 const filterFields = columns.slice(0, 3)
 const statusSummary = computed(() =>
   statuses.map((status: string) => ({
@@ -128,6 +155,7 @@ function reload() {
     const payload = listEntries(meta.key, filters.value)
     rows.value = payload.items
     total.value = payload.total
+    restricted.value = restrictedLedger()
   } catch (error) {
     errorMessage.value = error instanceof Error ? error.message : '航班保障列表读取失败'
   }

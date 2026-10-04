@@ -35,3 +35,13 @@ body { margin: 0; background: #f6f8fb; color: #1f2937; }
 .error-text { color: #b42318; }
 .status-legend { display: flex; flex-wrap: wrap; gap: 12px; margin: 0 0 10px; font-size: 12px; color: var(--muted); }
 .legend-item { background: #eef2f7; border-radius: 999px; padding: 2px 10px; }
+.panel { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 12px; }
+.panel-title { margin: 0 0 8px; font-size: 14px; }
+.judge-preview { margin: 4px 0 0; font-size: 13px; color: #166534; }
+.judge-preview.bad { color: #b42318; }
+.migrate-note { font-size: 12px; color: #166534; margin: 0 0 10px; }
+.row-abnormal td { background: #fef3f2; }
+.history-row td { background: #f8fafc; }
+.history-list { margin: 0; padding-left: 18px; font-size: 12px; color: var(--muted); }
+.ok-text { color: #166534; }
+.filter-item select { padding: 4px 8px; border: 1px solid var(--border); border-radius: 6px; }

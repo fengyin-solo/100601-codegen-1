@@ -59,6 +59,7 @@ npm run build
 | 要客保障 | `vip` | 要客保障单 | 保障编号、航班号、要客等级 |
 | 延误处置 | `delay` | 延误事件 | 事件编号、航班号、延误原因 |
 | 机坪安全巡查 | `apron` | 巡查记录 | 巡查编号、巡查区域、巡查人员 |
+| 危险品申报 | `dgoods` | 危险品申报单 | 申报单号、航班号、品名、包装等级 |
 | 保障资源调度 | `resplan` | 资源计划 | 计划编号、保障时段、机位需求 |
 
 ## 约定
@@ -68,4 +69,8 @@ npm run build
 - 字段、状态、动作与流转目标集中在 `frontend/src/data/modules.ts`；示例数据在
   `frontend/src/data/seed.ts`。
 - 状态流转只允许在 `local-service.ts` 里改，页面组件不做业务判断。
+- 危险品申报（`dgoods`）是特例：判定规则固定在 `frontend/src/data/dgoods-rules.ts`，
+  判定、幂等、顺序流转、资质校验、限制件台账与存量迁移都收在
+  `frontend/src/api/dgoods-service.ts`，不走通用 `runAction`；规则测试跑
+  `npm run test:dgoods`。
 - 想回到初始数据：清掉浏览器里 `airport-ground-ops:entries` 这一项，或调用 `resetModule(模块)`。
