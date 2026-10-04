@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import Dashboard from '@/views/Dashboard.vue'
+const Dgd = () => import('@/views/dgd/index.vue')
+const Dgrule = () => import('@/views/dgrule/index.vue')
+const Shipper = () => import('@/views/shipper/index.vue')
 const Flight = () => import('@/views/flight/index.vue')
 const Stand = () => import('@/views/stand/index.vue')
 const Bridge = () => import('@/views/bridge/index.vue')
@@ -24,6 +27,9 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', name: 'dashboard', component: Dashboard },
+    { path: '/dgd', name: 'dgd', component: Dgd },
+    { path: '/dgrule', name: 'dgrule', component: Dgrule },
+    { path: '/shipper', name: 'shipper', component: Shipper },
     { path: '/flight', name: 'flight', component: Flight },
     { path: '/stand', name: 'stand', component: Stand },
     { path: '/bridge', name: 'bridge', component: Bridge },

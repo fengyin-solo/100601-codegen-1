@@ -30,6 +30,8 @@ export type PageResult = {
 export type ActionResult = {
   ok: boolean
   message: string
+  /** 新建类动作返回的记录编号，方便页面跳到详情或继续流转 */
+  id?: number
 }
 
 export type OverviewResult = {

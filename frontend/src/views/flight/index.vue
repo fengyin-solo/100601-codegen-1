@@ -37,6 +37,8 @@
       <thead>
         <tr>
           <th v-for="column in columns" :key="column">{{ column }}</th>
+          <th>限制件票数</th>
+          <th>限制件件数</th>
           <th>当前状态</th>
           <th>可执行动作</th>
         </tr>
@@ -44,6 +46,11 @@
       <tbody>
         <tr v-for="row in rows" :key="String(row.id)">
           <td v-for="column in columns" :key="column">{{ row[column] ?? '—' }}</td>
+          <td :class="{ 'restricted-cell': restrictedOf(row).限制件票数 > 0 }">
+            {{ restrictedOf(row).限制件票数 }}
+            <span v-if="restrictedOf(row).待放行票数 > 0" class="cell-note">（{{ restrictedOf(row).待放行票数 }} 票待放行）</span>
+          </td>
+          <td :class="{ 'restricted-cell': restrictedOf(row).限制件总件数 > 0 }">{{ restrictedOf(row).限制件总件数 }}</td>
           <td>{{ row.status }}</td>
           <td class="row-actions">
             <button
@@ -58,13 +65,13 @@
           </td>
         </tr>
         <tr v-if="!rows.length">
-          <td :colspan="columns.length + 2" class="empty-state">暂无航班保障数据，可先登记航班保障任务</td>
+          <td :colspan="columns.length + 4" class="empty-state">暂无航班保障数据，可先登记航班保障任务</td>
         </tr>
       </tbody>
     </table>
 
     <footer class="page-foot">
-      <span>共 {{ total }} 条航班保障记录</span>
+      <span>共 {{ total }} 个航班；限制件数与「危险品申报 → 航班限制件待办」同一份数据（按航班号+航班日期对应）</span>
       <span v-if="errorMessage" class="error-text">{{ errorMessage }}</span>
     </footer>
   </section>
@@ -77,6 +84,7 @@ import {
   downloadEntries,
   listEntries,
   moduleMeta,
+  restrictedCountForFlight,
   runAction as applyAction,
 } from '@/api/local-service'
 import type { EntryRow } from '@/data/types'
@@ -120,6 +128,11 @@ function runAction(action: string, row: EntryRow) {
     return
   }
   reload()
+}
+
+// 限制件数不存第二份：每次渲染直接从危险品申报单聚合，与地服台账页同源。
+function restrictedOf(row: EntryRow) {
+  return restrictedCountForFlight(String(row['航班号'] ?? ''), String(row['计划到达'] ?? ''))
 }
 
 function reload() {
